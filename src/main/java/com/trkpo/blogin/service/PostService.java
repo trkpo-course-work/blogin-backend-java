@@ -56,7 +56,7 @@ public class PostService {
             for (Post p: posts) {
                 PostDTO postDTO = postConverter.convertPostEntityToDTO(p);
                 if (!postDTO.isPrivate()) {
-                    news.add(postConverter.convertPostEntityToDTO(p));
+                    news.add(postDTO);
                 }
             }
         }

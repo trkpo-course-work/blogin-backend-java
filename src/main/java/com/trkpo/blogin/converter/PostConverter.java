@@ -44,6 +44,7 @@ public class PostConverter {
     public PostDTO convertPostEntityToDTO(Post post) throws JsonProcessingException {
         PostDTO postDTO = new PostDTO();
         User user = post.getUser();
+        postDTO.setId(post.getId());
         postDTO.setUserDTO(userConverter.convertUserEntityToDTO(user));
         postDTO.setDateTime(post.getDateTime());
         postDTO.setPrivate(post.isPrivate());
