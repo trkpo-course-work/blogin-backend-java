@@ -3,6 +3,7 @@ package com.trkpo.blogin.dto;
 import java.util.List;
 
 public class PostDTO {
+    private Long id;
     private UserDTO userDTO;
     private Long userId;
     private String text;
@@ -11,7 +12,7 @@ public class PostDTO {
     private Long dateTime;
     private Long pictureId;
 
-    public com.trkpo.blogin.dto.UserDTO getUserDTO() {
+    public UserDTO getUserDTO() {
         return userDTO;
     }
 
@@ -65,5 +66,13 @@ public class PostDTO {
 
     public void setSpan(List<SpanDTO> span) {
         this.span = span;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
