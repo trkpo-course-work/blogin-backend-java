@@ -154,8 +154,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(classes = {PostController.class, PostConverter.class, UserConverter.class})
-class BloginApplicationTests {
+@SpringBootTest(classes = {PostController.class})
+class PostControllerTest {
     @InjectMocks
     @Autowired
     PostController postController;
@@ -171,10 +171,10 @@ class BloginApplicationTests {
     PictureRepository pictureRepository;
     @MockBean
     CredentialRepository credentialRepository;
-    @Autowired
+    @MockBean
     PostConverter postConverter;
-    @Autowired
-    PostConverter userConverter;
+    @MockBean
+    UserConverter userConverter;
 
     private PostDTO postDTO = new PostDTO();
     private Post post = new Post();
@@ -183,12 +183,6 @@ class BloginApplicationTests {
 
     @BeforeEach
     public void init() throws JsonProcessingException {
-        MockitoAnnotations.openMocks(this);
-        Mockito.when(postRepository.save(Mockito.any(Post.class))).thenAnswer(invocation -> {
-            Object[] args = invocation.getArguments();
-            return args[0];
-        });
-        Mockito.when(userService.getUserFromContext()).thenReturn(new User("Name", "email", null));
         user.setId(1L);
         user.setName("name");
 
@@ -199,7 +193,6 @@ class BloginApplicationTests {
         userDTO.setEmail("email");
         userDTO.setPassword("pass");
 
-        postDTO.setId(1L);
         postDTO.setUserDTO(userDTO);
         postDTO.setUserId(userDTO.getId());
         postDTO.setText("text");
@@ -212,7 +205,18 @@ class BloginApplicationTests {
         post.setPrivate(true);
         post.setText("text");
 
-        Mockito.when(credentialRepository.findByUserId(Mockito.any(Long.class))).thenReturn(Optional.of(new Credentials("login", "pass", "email")));
+
+        MockitoAnnotations.openMocks(this);
+        Mockito.when(postRepository.save(Mockito.any(Post.class))).thenAnswer(invocation -> {
+            Object[] args = invocation.getArguments();
+            Post post = (Post) args[0];
+            post.setId(1L);
+            return post;
+        });
+        Mockito.when(postConverter.convertPostDTOtoEntity(Mockito.any(PostDTO.class), Mockito.any(User.class))).thenReturn(post);
+        Mockito.when(postConverter.convertPostEntityToDTO(Mockito.any(Post.class))).thenReturn(postDTO);
+        Mockito.when(userService.getUserFromContext()).thenReturn(new User("Name", "email", null));
+
     }
 
     @Test
