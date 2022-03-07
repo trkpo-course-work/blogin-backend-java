@@ -1,6 +1,7 @@
 package com.trkpo.blogin.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PostDTO {
     private Long id;
@@ -74,5 +75,32 @@ public class PostDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "PostDTO{" +
+                "id=" + id +
+                ", userDTO=" + userDTO +
+                ", userId=" + userId +
+                ", text='" + text + '\'' +
+                ", span=" + span +
+                ", isPrivate=" + isPrivate +
+                ", dateTime=" + dateTime +
+                ", pictureId=" + pictureId +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PostDTO)) return false;
+        PostDTO postDTO = (PostDTO) o;
+        return isPrivate() == postDTO.isPrivate() && Objects.equals(getId(), postDTO.getId()) && Objects.equals(getUserDTO(), postDTO.getUserDTO()) && Objects.equals(getUserId(), postDTO.getUserId()) && Objects.equals(getText(), postDTO.getText()) && Objects.equals(getSpan(), postDTO.getSpan()) && Objects.equals(getDateTime(), postDTO.getDateTime()) && Objects.equals(getPictureId(), postDTO.getPictureId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUserDTO(), getUserId(), getText(), getSpan(), isPrivate(), getDateTime(), getPictureId());
     }
 }

@@ -1,6 +1,7 @@
 package com.trkpo.blogin.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity(name = "Post")
 @Table(name = "Posts")
@@ -74,5 +75,31 @@ public class Post {
 
     public void setSpan(String span) {
         this.span = span;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", user=" + user +
+                ", text='" + text + '\'' +
+                ", picture=" + picture +
+                ", dateTime=" + dateTime +
+                ", isPrivate=" + isPrivate +
+                ", span='" + span + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Post)) return false;
+        Post post = (Post) o;
+        return isPrivate() == post.isPrivate() && Objects.equals(getId(), post.getId()) && Objects.equals(getUser(), post.getUser()) && Objects.equals(getText(), post.getText()) && Objects.equals(getPicture(), post.getPicture()) && Objects.equals(getDateTime(), post.getDateTime()) && Objects.equals(getSpan(), post.getSpan());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUser(), getText(), getPicture(), getDateTime(), isPrivate(), getSpan());
     }
 }

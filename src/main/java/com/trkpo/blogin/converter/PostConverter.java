@@ -22,8 +22,6 @@ public class PostConverter {
     @Autowired
     private PictureRepository pictureRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private UserConverter userConverter;
     private ObjectMapper objectMapper = new ObjectMapper();
 

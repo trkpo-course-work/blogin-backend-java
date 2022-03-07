@@ -32,7 +32,7 @@ public class PostService {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public void editPost(Post postToEdit, PostDTO post) throws JsonProcessingException {
+    public Post editPost(Post postToEdit, PostDTO post) throws JsonProcessingException {
         if (post.getPictureId() != null) {
             Picture pic = pictureRepository.getById(post.getPictureId());
             postToEdit.setPicture(pic);
@@ -41,6 +41,7 @@ public class PostService {
         }
         postToEdit.setSpan(objectMapper.writeValueAsString(post.getSpan()));
         postToEdit.setText(post.getText());
+        return postToEdit;
     }
 
     public List<PostDTO> getPosts(User user) throws JsonProcessingException {
