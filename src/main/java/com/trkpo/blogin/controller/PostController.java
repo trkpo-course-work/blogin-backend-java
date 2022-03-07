@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.trkpo.blogin.converter.PostConverter;
 import com.trkpo.blogin.dto.PostDTO;
 import com.trkpo.blogin.entity.Post;
-import com.trkpo.blogin.entity.User;
 import com.trkpo.blogin.repository.PostRepository;
 import com.trkpo.blogin.repository.UserRepository;
 import com.trkpo.blogin.service.PostService;
@@ -12,7 +11,6 @@ import com.trkpo.blogin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;

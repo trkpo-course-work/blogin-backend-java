@@ -3,6 +3,7 @@ package com.trkpo.blogin.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity(name = "Pictures")
 public class Picture {
@@ -33,5 +34,18 @@ public class Picture {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Picture)) return false;
+        Picture picture = (Picture) o;
+        return Objects.equals(getId(), picture.getId()) && Objects.equals(getPath(), picture.getPath());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getPath());
     }
 }
