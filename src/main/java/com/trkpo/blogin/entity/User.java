@@ -2,6 +2,7 @@ package com.trkpo.blogin.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity(name = "user")
 @Table(name = "users")
@@ -58,5 +59,18 @@ public class User {
 
     public void setFavourites(List<User> favourites) {
         this.favourites = favourites;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName()) && Objects.equals(getPicture(), user.getPicture()) && Objects.equals(getFavourites(), user.getFavourites());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getPicture(), getFavourites());
     }
 }

@@ -39,12 +39,12 @@ public class UserController {
 
     @PutMapping("/v1/user")
     public ResponseEntity<?> edit(@RequestBody UserDTO userDTO) throws InvalidPasswordException {
-        return ResponseEntity.ok(userService.editUser(userDTO, getUserFromContext()));
+        return ResponseEntity.ok(userService.editUser(userDTO, userService.getUserFromContext()));
     }
 
     @GetMapping("/v1/user")
     public ResponseEntity<?> getAuthorizedUserInfo() {
-        return ResponseEntity.ok(userConverter.convertUserEntityToDTO(getUserFromContext()));
+        return ResponseEntity.ok(userConverter.convertUserEntityToDTO(userService.getUserFromContext()));
     }
 
     @GetMapping("/v1/user/{id}")
@@ -56,14 +56,14 @@ public class UserController {
 
     @GetMapping("/v1/user/favorites")
     public ResponseEntity<?> getUserFavourites() {
-        User user = userRepository.getById(getUserFromContext().getId());
+        User user = userRepository.getById(userService.getUserFromContext().getId());
         List<User> favourite = user.getFavourites();
         return ResponseEntity.ok().body(favourite.stream().map(it -> userConverter.convertUserEntityToDTO(it)).collect(Collectors.toList()));
     }
 
     @PostMapping("/v1/user/favorites/{id}")
     public ResponseEntity<?> addUserFavorites(@PathVariable Long id) {
-        if (userService.addFavorites(id, getUserFromContext())) {
+        if (userService.addFavorites(id, userService.getUserFromContext())) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -72,7 +72,7 @@ public class UserController {
 
     @DeleteMapping("/v1/user/favorites/{id}")
     public ResponseEntity<?> deleteUserFavorites(@PathVariable Long id) {
-        if (userService.deleteFavorites(id, getUserFromContext())) {
+        if (userService.deleteFavorites(id, userService.getUserFromContext())) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -81,7 +81,7 @@ public class UserController {
 
     @GetMapping("/v1/user/news")
     public ResponseEntity<?> getNews() {
-        User user = getUserFromContext();
+        User user = userService.getUserFromContext();
         try {
             return ResponseEntity.ok().body(postService.getNews(user));
         } catch (JsonProcessingException ex) {
@@ -92,7 +92,7 @@ public class UserController {
     @GetMapping("/v1/user/posts")
     public ResponseEntity<?> getPosts() {
         try {
-            return ResponseEntity.ok().body(postService.getPosts(getUserFromContext()));
+            return ResponseEntity.ok().body(postService.getPosts(userService.getUserFromContext()));
         } catch (JsonProcessingException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -110,9 +110,9 @@ public class UserController {
     @Transactional
     @DeleteMapping("/v1/user")
     public ResponseEntity<?> deleteUser() {
-        credentialRepository.deleteByUserId(getUserFromContext().getId());
-        postRepository.deleteAllByUserId(getUserFromContext().getId());
-        userRepository.deleteById(getUserFromContext().getId());
+        credentialRepository.deleteByUserId(userService.getUserFromContext().getId());
+        postRepository.deleteAllByUserId(userService.getUserFromContext().getId());
+        userRepository.deleteById(userService.getUserFromContext().getId());
         return ResponseEntity.ok().build();
     }
 
@@ -128,12 +128,7 @@ public class UserController {
 
     @GetMapping("/v1/user/isFavorite/{id}")
     public ResponseEntity<?> isFavorite(@PathVariable Long id) {
-        return ResponseEntity.ok().body(userService.isFavorite(id, getUserFromContext()));
-    }
-
-    private User getUserFromContext() {
-        String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.getById(Long.valueOf(id));
+        return ResponseEntity.ok().body(userService.isFavorite(id, userService.getUserFromContext()));
     }
 
     @ExceptionHandler(InvalidPasswordException.class)
