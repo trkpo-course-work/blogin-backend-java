@@ -1,6 +1,8 @@
-package com.trkpo.blogin.converter;
+package com.trkpo.blogin.unit.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.trkpo.blogin.converter.PostConverter;
+import com.trkpo.blogin.converter.UserConverter;
 import com.trkpo.blogin.dto.PostDTO;
 import com.trkpo.blogin.dto.SpanDTO;
 import com.trkpo.blogin.dto.UserDTO;

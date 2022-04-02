@@ -1,4 +1,4 @@
-package com.trkpo.blogin.service;
+package com.trkpo.blogin.unit.service;
 
 import com.trkpo.blogin.converter.UserConverter;
 import com.trkpo.blogin.dto.UserDTO;
@@ -9,6 +9,7 @@ import com.trkpo.blogin.repository.CredentialRepository;
 import com.trkpo.blogin.repository.PictureRepository;
 import com.trkpo.blogin.repository.PostRepository;
 import com.trkpo.blogin.repository.UserRepository;
+import com.trkpo.blogin.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -144,6 +145,12 @@ public class UserServiceTest {
         answer = userService.editUser(editedUserDTO, user);
         assertEquals(correct_answer, answer);
 
+        editedUserDTO.setEmail("new email");
+        correct_answer = editedUserDTO;
+        userDTO.setEmail(editedUserDTO.getEmail());
+        answer = userService.editUser(editedUserDTO, user);
+        assertEquals(correct_answer, answer);
+
         editedUserDTO.setLogin("new login");
         correct_answer = editedUserDTO;
         userDTO.setLogin(editedUserDTO.getLogin());
@@ -156,18 +163,19 @@ public class UserServiceTest {
         answer = userService.editUser(editedUserDTO, user);
         assertEquals(correct_answer, answer);
 
-        editedUserDTO.setNewPassword("new pswd");
+        editedUserDTO.setNewPassword("new pswd"); //дто с измененным паролем
+        editedUserDTO.setPassword(credentials.getPassword()); //верный старый пароль "pswd"
         correct_answer = editedUserDTO;
-        userDTO.setPassword(editedUserDTO.getNewPassword());
-        credentials.setPassword(encoder.encode("pswd"));
-        answer = userService.editUser(editedUserDTO, user);
-        assertEquals(correct_answer.getNewPassword(), answer.getPassword());
+        userDTO.setPassword(editedUserDTO.getNewPassword()); //изменяем для выполнения проверки (userDTO должен быть равен editedUserDTO)
+        credentials.setPassword(encoder.encode("pswd")); //изменяем пароль для выполнения проверки
+        answer = userService.editUser(editedUserDTO, user); //процедура изменения пользователя
+        assertEquals(correct_answer.getNewPassword(), answer.getPassword()); //проверка того, что пароль сменился
 
-        editedUserDTO.setNewPassword("new pswd");
-        editedUserDTO.setPassword("wrong pswd");
-        userDTO.setPassword(editedUserDTO.getNewPassword());
-        credentials.setPassword(encoder.encode("pswd"));
-        assertThrows(InvalidPasswordException.class, () -> userService.editUser(editedUserDTO, user));
+        editedUserDTO.setNewPassword("new pswd"); //дто с измененным паролем
+        editedUserDTO.setPassword("wrong pswd"); //НЕВЕРНЫЙ старый пароль
+        userDTO.setPassword(editedUserDTO.getNewPassword()); //изменяем для выполнения проверки (userDTO должен быть равен editedUserDTO)
+        credentials.setPassword(encoder.encode("pswd")); //изменяем пароль для выполнения проверки
+        assertThrows(InvalidPasswordException.class, () -> userService.editUser(editedUserDTO, user)); //проверка что вызывается исключение - старый пароль неверен
     }
 
     @Test

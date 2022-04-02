@@ -1,6 +1,7 @@
-package com.trkpo.blogin.controller;
+package com.trkpo.blogin.unit.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.trkpo.blogin.controller.UserController;
 import com.trkpo.blogin.converter.PostConverter;
 import com.trkpo.blogin.converter.UserConverter;
 import com.trkpo.blogin.dto.PostDTO;

@@ -1,4 +1,4 @@
-package com.trkpo.blogin.service;
+package com.trkpo.blogin.unit.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.trkpo.blogin.converter.PostConverter;
@@ -11,6 +11,7 @@ import com.trkpo.blogin.repository.CredentialRepository;
 import com.trkpo.blogin.repository.PictureRepository;
 import com.trkpo.blogin.repository.PostRepository;
 import com.trkpo.blogin.repository.UserRepository;
+import com.trkpo.blogin.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
