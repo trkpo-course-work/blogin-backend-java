@@ -10,6 +10,7 @@ import com.trkpo.blogin.repository.CredentialRepository;
 import com.trkpo.blogin.repository.PictureRepository;
 import com.trkpo.blogin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -107,5 +108,10 @@ public class UserService {
         user.getFavourites().remove(favouriteUser.get());
         userRepository.save(user);
         return true;
+    }
+
+    public User getUserFromContext() {
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.getById(Long.valueOf(userId));
     }
 }

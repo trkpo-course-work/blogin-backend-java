@@ -9,7 +9,9 @@ import com.trkpo.blogin.entity.Post;
 import com.trkpo.blogin.entity.User;
 import com.trkpo.blogin.repository.PictureRepository;
 import com.trkpo.blogin.repository.PostRepository;
+import com.trkpo.blogin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private PictureRepository pictureRepository;
     @Autowired
     private PostRepository postRepository;
@@ -28,7 +32,7 @@ public class PostService {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public void editPost(Post postToEdit, PostDTO post) throws JsonProcessingException {
+    public Post editPost(Post postToEdit, PostDTO post) throws JsonProcessingException {
         if (post.getPictureId() != null) {
             Picture pic = pictureRepository.getById(post.getPictureId());
             postToEdit.setPicture(pic);
@@ -37,6 +41,7 @@ public class PostService {
         }
         postToEdit.setSpan(objectMapper.writeValueAsString(post.getSpan()));
         postToEdit.setText(post.getText());
+        return postToEdit;
     }
 
     public List<PostDTO> getPosts(User user) throws JsonProcessingException {
@@ -61,5 +66,10 @@ public class PostService {
             }
         }
         return news.stream().sorted(Comparator.comparing(PostDTO::getDateTime).reversed()).collect(Collectors.toList());
+    }
+
+    public User getUserFromContext() {
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.getById(Long.valueOf(userId));
     }
 }

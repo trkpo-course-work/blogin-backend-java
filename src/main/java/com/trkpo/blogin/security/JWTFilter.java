@@ -29,7 +29,6 @@ public class JWTFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7);
             userId = JWTUtil.extractId(jwt);
         }
-        System.out.println("USER ID :" + userId);
         if (userId != null) {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(userId);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
